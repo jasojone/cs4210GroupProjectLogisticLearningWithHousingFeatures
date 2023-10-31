@@ -28,10 +28,21 @@ from sklearn.pipeline import Pipeline
 # Mounting Google Drive is optional and only required if you're running this on Google Colab
 # from google.colab import drive
 # drive.mount('/content/drive')
+#
 
 class HousingPricePrediction:
-
+    """
+    HousingPricePrediction class for the Kaggle House Prices: Advanced Regression Techniques competition.
+    This class contains methods to explore the data, preprocess the data, train a model, make predictions, and prepare a submission file.
+    """
     def __init__(self, train_filepath, test_filepath):
+        """
+        Constructor for HousingPricePrediction class to initialize the train and test data.
+
+        Args:
+            train_filepath (str): Filepath for the training data
+            test_filepath (str): Filepath for the test data
+        """
         self.train_data = pd.read_csv(train_filepath)
         self.test_data = pd.read_csv(test_filepath)
         self.sample_submission = None  # Will be loaded later
@@ -44,11 +55,17 @@ class HousingPricePrediction:
         self.test_ids = None  # Will be used to store the Id column from the test data
 
     def explore_data(self):
+        """
+        Method to explore the data. This method prints the first 5 rows of the train and test data, and the info of the train and test data.
+        """
         print(self.train_data.head())
         print(self.train_data.info())
         print(self.test_data.head())
         print(self.test_data.info())
     def preprocess_data(self):
+        """ 
+        Method to preprocess the data. This method separates the features and target variable, and applies transformations to the train and test data.
+        """
         # Separate features and target variable
         self.test_ids = self.test_data['Id']  # Store the 'Id' column from the test data
         self.train_ids = self.train_data['Id']  # Store the 'Id' column from the train data
@@ -81,21 +98,40 @@ class HousingPricePrediction:
 
 
     def train_model(self):
+        """
+        Method to train a model. This method trains a linear regression model on the train data.
+        """
         # Training a linear regression model
         self.model = LinearRegression()
         self.model.fit(self.X_train, self.y_train)
 
     def evaluate_model(self):
+        """
+        Method to evaluate the model. This method evaluates the trained model using cross-validation or a validation set.
+        """
         # Evaluate the trained model using cross-validation or a validation set
         # Placeholder: add evaluation steps if necessary
         pass
 
     def make_predictions(self):
+        """
+        Method to make predictions. This method makes predictions on the test data using the trained model.
+
+        Returns:
+            predictions (numpy.ndarray): Predictions made by the model on the test data
+        """
         # Making predictions on the test data
         predictions = self.model.predict(self.X_test)
         return predictions
 
     def prepare_submission(self, predictions, submission_filepath):
+        """
+        Method to prepare a submission file. This method prepares a submission file using the predictions made by the model.
+
+        Args:
+            predictions (numpy.ndarray): Predictions made by the model on the test data
+            submission_filepath (str): Filepath to save the submission file
+        """
         # Preparing the submission file
         self.sample_submission = pd.DataFrame({'Id': self.test_ids, 'SalePrice': predictions})
         self.sample_submission.to_csv(submission_filepath, index=False)
